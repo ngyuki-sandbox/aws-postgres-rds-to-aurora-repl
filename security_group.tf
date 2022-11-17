@@ -1,24 +1,11 @@
-################################################################################
-# Security Group
-################################################################################
-
-################################################################################
-# server
 
 resource "aws_security_group" "server" {
-  name        = "bob-server"
-  description = "bob-server"
+  name        = "${var.prefix}-server"
+  description = "${var.prefix}-server"
   vpc_id      = data.aws_vpc.vpc.id
 
   tags = {
-    "Name" = "bob-server"
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["211.5.105.208/28"]
+    "Name" = "${var.prefix}-server"
   }
 
   egress {
@@ -29,16 +16,13 @@ resource "aws_security_group" "server" {
   }
 }
 
-################################################################################
-# RDS
-
-resource "aws_security_group" "rds_bob" {
-  name        = "bob-rds"
-  description = "bob-rds"
+resource "aws_security_group" "rds" {
+  name        = "${var.prefix}-rds"
+  description = "${var.prefix}-rds"
   vpc_id      = data.aws_vpc.vpc.id
 
   tags = {
-    "Name" = "bob-rds"
+    "Name" = "${var.prefix}-rds"
   }
 
   ingress {
@@ -47,6 +31,7 @@ resource "aws_security_group" "rds_bob" {
     protocol  = "tcp"
     security_groups = [
       aws_security_group.server.id,
+      aws_security_group.aurora.id,
     ]
   }
 
@@ -58,13 +43,13 @@ resource "aws_security_group" "rds_bob" {
   }
 }
 
-resource "aws_security_group" "rds_alice" {
-  name        = "alice-rds"
-  description = "alice-rds"
+resource "aws_security_group" "aurora" {
+  name        = "${var.prefix}-aurora"
+  description = "${var.prefix}-aurora"
   vpc_id      = data.aws_vpc.vpc.id
 
   tags = {
-    "Name" = "alice-rds"
+    "Name" = "${var.prefix}-aurora"
   }
 
   ingress {
@@ -73,7 +58,6 @@ resource "aws_security_group" "rds_alice" {
     protocol  = "tcp"
     security_groups = [
       aws_security_group.server.id,
-      aws_security_group.rds_bob.id,
     ]
   }
 

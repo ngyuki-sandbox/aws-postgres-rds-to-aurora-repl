@@ -1,9 +1,6 @@
-################################################################################
-# AWS
-################################################################################
 
 terraform {
-  required_version = "~> 1.1.8"
+  required_version = "~> 1.3.1"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -13,5 +10,5 @@ terraform {
 }
 
 provider "aws" {
-  region  = "ap-northeast-1"
+  region = "ap-northeast-1"
 }
